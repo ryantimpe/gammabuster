@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # gammabuster
 
-The gammabuster package contains two functions that translate judgemental estimates about a random variable into the gamma distrribution parameters consistent with that judgement. This is helpful because the parameters of a gamma distribution--the shape and scale parameters--don't have a real-world interpretation. It's hard to make elicit judgemental estimates of a gamma distribution via its parameters directly. However, it's relatively straightforward to elicit judgemnts about the likely upper and lower bounds of the distribution or about the mean and range of the distribution. The gammabuster package converts these judgments into needed paramater estimates.
+The gammabuster package contains two functions that translate judgmental estimates about a random variable into the gamma distribution parameters consistent with that judgement. This is helpful because the parameters of a gamma distribution--the shape and scale parameters--don't have a real-world interpretation. This makes it hard to elicit judgmental estimates of a gamma distribution via its parameters directly. However, it's relatively straightforward to elicit judgments about the likely upper and lower bounds of a distribution or about the mean and range of the distribution. The gammabuster package solves this problem. It converts judgmental estimates about a gamma distribution into needed parameter estimates.
 
 ## Installation
 
