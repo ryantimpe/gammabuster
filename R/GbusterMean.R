@@ -4,7 +4,7 @@
 #' @param range The expected range containing the mean
 #' @param pct One's confidence in the above range, e.g., .95
 #' @param start Starting values for the shape and scale parameters of a gamma function
-#' @return A list of output.  The first list item contains the parameters describing the shape
+#' @return A list of output.  The first list item $par contains the parameters describing the shape
 #'  and scale of a gamma distribution.  The remaining list items describe the convergence of
 #'  the search algorithm.
 #' @examples

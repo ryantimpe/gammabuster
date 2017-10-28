@@ -1,0 +1,98 @@
+---
+title: "gammabuster explanation"
+author: "Brent Johnson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gammabuster explanation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = TRUE}
+library(gammabuster)
+```
+
+The [gamma distribution](https://en.wikipedia.org/wiki/Gamma_distribution) is the [conjugate prior](https://en.wikipedia.org/wiki/Conjugate_prior) to a [Poisson](https://en.wikipedia.org/wiki/Poisson_distribution) likelihood.  It's described by a shape ($\alpha$) and rate ($\beta$) parameter. But unlike, say, a normal or a Poisson distribution, these gamma distribution parameters don't have an immediately intuitive interpretation. That is, it's not straightforward to verbally elicit the parameter values that describe a particular envisioned gamma distribution.  This posses a problem if one wants to fit, say, a Bayesian Poisson or loglinear model using judgemental inputs.  Sure, the mean of a gamma distribution is readily calculated as follows...
+
+\[
+\begin{aligned}
+\frac{\alpha}{\beta}
+\end{aligned}
+\]
+
+But the fact that both parameters, ($\alpha$) and ($\beta$), are used to define both the mean *AND* and the variance of a gamma distribution...
+
+\[
+\begin{aligned}
+\frac{\alpha}{\beta^2}
+\end{aligned}
+\]
+
+...makes it hard to mentally separate the two. Besides, no one intuitively thinks of distributions in terms of abstract $\alpha$'s and $\beta$'s. Again, these parameters have no ready real-world interpretation. More commonly, experts (and normal people) more easily think of distributions in terms of their means and standard deviations. Or perhaps even easier, one can elicit judgemental input in the form of ranges or confidence intervals, as in, "I'm 95% confident that result X lies somewhere between 100 and 200."  
+
+The functions in this package take such easier-to-elicit judgemental inputs and translate them into the more numerically useful $\alpha$'s and $\beta$'s of a gamma distribution. The gamma distribution is appropriate for random variables believed to be continuous and strictly positive.  At higher mean values and with little variance, the gamma distribution is often approximated using a normal distribution.  However, at lower mean values and wider variances, a normal distribution would be innappropriate, Curious readers may appreciate that various [applets](http://homepage.divms.uiowa.edu/~mbognar/applets/gamma.html) exist to let one visually explore the effect of a gamma disribution's two parameters.
+
+# The GbusterMinMax function
+
+The gammabuster package contains just two functions.  For example, suppose one wishes to make a judgement about an unknown quantity X. Suppose furthermore that one believes X to be continuous and strictly positive such that the gamma is a good candidate distribution. If one believes that X lies somewhere between the values of, say, 5 and 10 (and if one is somewhat confident in that judgement, e.g., p = .90), then one can "solve" for the gamma distribution using the GbusterMinMax() function as follows:
+
+```{r minmax.input, include = TRUE}
+judgement1 <- GbusterMinMax(5, 10, .90)
+```
+...which returns the following list object:
+```{r minmax.output, include = TRUE}
+print(judgement1)
+```
+Inside the above list result, the first element (judgement1\$par) in the printed object contains the shape and rate parameters ($\alpha$ and $\beta$), respectively, that are consistent with these particular judgemental inputs regarding the distribution's range. In the example above, this particular judgement is consistent with gamma parameters $\alpha$ = 14 and $\beta$ = 1.9 or, in other words, a gamma distribution with mean = 7.4 (14/1.9) and standard deviation = 1.97 (sqrt(7.4/1.97^2)). The density of this distribution looks as follows:
+
+```{r plot, include = TRUE}
+x <- seq(2, 14, length=100)
+hx <- dgamma(x, shape=14, rate=1.9)
+
+plot(
+  x,
+  hx,
+  type = "l",
+  lty = 1,
+  xlab = "Value of X",
+  ylab = "Density",
+  main = "Gamma distribution for an interval between 5 and 10 \n (i.e., shape=14, scale=1.9)",
+  col = "blue",
+  lwd = 3
+)
+```
+
+Note that with these parameters, the above gamma distribution is skewed slightly to the right compared to a normal distribution having the same mean and standard deviation. In other words, the mean of the gamma is not at the midpoint of its range. Unlike the normal, a gamma distribution's mean does not equal its median or mode.
+
+# The GbusterMean function
+
+Alternatively, suppose it's easier for our judge to articulate his estimate in terms of a specific mean and range instead.  For example, an expert might declare he believes that the unknown value of X lies within a gamma distribution having an exact mean of 7.5 and a range of 4 (i.e., roughly +/- 2 units on either side of the mean) with probability .90.  This problem is solved using the GbusterMean() function:
+
+```{r mean.input, include = TRUE}
+judgement2 <- GbusterMean(7.5, 4, pct=.90)
+```
+...which returns the following list object:
+```{r mean.output, include = TRUE}
+print(judgement2)
+```
+Now the function returns the gamma shape and rate parameters 23.1 and 3.08, respectively.  This translates into a gamma distribution with a mean of 7.5 and a standard deviation of 1.56. It's interesting that the gamma parameters in Judgement1 and Judgement2 are quite different and yet yield somewhat similar means and variances. This demonstrates the difficultly of eliciting appropriate gamma shape and rate parameters directly.
+
+The functions in gammabuster work over a wide range of inputs. It's possible, however, that given particularly extreme inputs, gammabuster won't converge.  Using the above example, this would be revealed if judgement2\$convergence $\neq$ 0.  If the algorithm fails to converge, try using different parameter starting values--ones that more closely approximate the desired gamma mean such as,
+
+```{r start, include = TRUE}
+judgement2 <- GbusterMean(7.5, 4, pct=.99, start=c(20,3))
+```
+
+# Why the gammabuster package?
+
+The gamma distribution is the Bayesian [conjugate prior](https://en.wikipedia.org/wiki/Conjugate_prior) to the Poisson. This makes gammabuster helpful for eliciting judgemental Bayesian priors. In other words, if one has a Poisson model with mean $\lambda$, one an use the gammabuster package to specify a gamma conjugate prior on $\lambda$ using judgemental inputs.  Making this more concrete and to carry the above example one step further, one could specify a prior belief that the mean $\lambda$ of a Poisson distribution has a 90% chance of lying between 5 and 10 as follow...
+  \[
+    \begin{aligned}
+    \lambda \sim & gamma(14, 1.9)\\
+    \end{aligned}
+  \]
+...And include the above prior using one's favorite Bayesian software (e.g., [PyStan](http://mc-stan.org/users/interfaces/pystan.html), [RStan](http://mc-stan.org/users/interfaces/rstan), [OpenBugs](http://www.openbugs.net/w/FrontPage), or SAS's [PROC MCMC](https://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/mcmc_toc.htm)). In addition, because the gamma is conjugate, gammabuster can help one compute posterior estimates analytically. It also provides the ingredients should one wish to employ a gamma "data augmentation prior" (DAP).
+
+My creation of the gammabuster package was inspired by [betabuster](http://cadms.ucdavis.edu/diagnostictests/betabuster.html), a tool for eliciting judgemental beta priors. An R package version of Betabuster is also available in the [epiR package](https://cran.r-project.org/web/packages/epiR/index.html) on CRAN. 
+

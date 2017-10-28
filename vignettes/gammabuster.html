@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Brent Johnson" />
+
+<meta name="date" content="2017-10-28" />
+
+<title>gammabuster explanation</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">gammabuster explanation</h1>
+<h4 class="author"><em>Brent Johnson</em></h4>
+<h4 class="date"><em>2017-10-28</em></h4>
+
+
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gammabuster)</code></pre></div>
+<p>The <a href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma distribution</a> is the <a href="https://en.wikipedia.org/wiki/Conjugate_prior">conjugate prior</a> to a <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Poisson</a> likelihood. It’s described by a shape (<span class="math inline">\(\alpha\)</span>) and rate (<span class="math inline">\(\beta\)</span>) parameter. But unlike, say, a normal or a Poisson distribution, these gamma distribution parameters don’t have an immediately intuitive interpretation. That is, it’s not straightforward to verbally elicit the parameter values that describe a particular envisioned gamma distribution. This posses a problem if one wants to fit, say, a Bayesian Poisson or loglinear model using judgemental inputs. Sure, the mean of a gamma distribution is readily calculated as follows…</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\alpha}{\beta}
+\end{aligned}
+\]</span></p>
+<p>But the fact that both parameters, (<span class="math inline">\(\alpha\)</span>) and (<span class="math inline">\(\beta\)</span>), are used to define both the mean <em>AND</em> and the variance of a gamma distribution…</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\alpha}{\beta^2}
+\end{aligned}
+\]</span></p>
+<p>…makes it hard to mentally separate the two. Besides, no one intuitively thinks of distributions in terms of abstract <span class="math inline">\(\alpha\)</span>’s and <span class="math inline">\(\beta\)</span>’s. Again, these parameters have no ready real-world interpretation. More commonly, experts (and normal people) more easily think of distributions in terms of their means and standard deviations. Or perhaps even easier, one can elicit judgemental input in the form of ranges or confidence intervals, as in, “I’m 95% confident that result X lies somewhere between 100 and 200.”</p>
+<p>The functions in this package take such easier-to-elicit judgemental inputs and translate them into the more numerically useful <span class="math inline">\(\alpha\)</span>’s and <span class="math inline">\(\beta\)</span>’s of a gamma distribution. The gamma distribution is appropriate for random variables believed to be continuous and strictly positive. At higher mean values and with little variance, the gamma distribution is often approximated using a normal distribution. However, at lower mean values and wider variances, a normal distribution would be innappropriate, Curious readers may appreciate that various <a href="http://homepage.divms.uiowa.edu/~mbognar/applets/gamma.html">applets</a> exist to let one visually explore the effect of a gamma disribution’s two parameters.</p>
+<div id="the-gbusterminmax-function" class="section level1">
+<h1>The GbusterMinMax function</h1>
+<p>The gammabuster package contains just two functions. For example, suppose one wishes to make a judgement about an unknown quantity X. Suppose furthermore that one believes X to be continuous and strictly positive such that the gamma is a good candidate distribution. If one believes that X lies somewhere between the values of, say, 5 and 10 (and if one is somewhat confident in that judgement, e.g., p = .90), then one can “solve” for the gamma distribution using the GbusterMinMax() function as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">judgement1 &lt;-<span class="st"> </span><span class="kw">GbusterMinMax</span>(<span class="dv">5</span>, <span class="dv">10</span>, .<span class="dv">90</span>)</code></pre></div>
+<p>…which returns the following list object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(judgement1)</code></pre></div>
+<pre><code>## $par
+## [1] 14.039406  1.900413
+## 
+## $value
+## [1] 7.100857e-09
+## 
+## $counts
+## function gradient 
+##       81       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL</code></pre>
+<p>In the above list result, the first element (par) in the printed object contains the shape and rate parameters (<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>), respectively, that are consistent with these particular judgemental inputs about the distribution’s range. In the example above, this particular judgement is consistent with gamma parameters <span class="math inline">\(\alpha\)</span> = 14 and <span class="math inline">\(\beta\)</span> = 1.9 or, in other words, a gamma distribution with mean = 7.4 (14/1.9) and standard deviation = 1.97 (sqrt(7.4/1.97^2)). The density of this distribution looks as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">2</span>, <span class="dv">14</span>, <span class="dt">length=</span><span class="dv">100</span>)
+hx &lt;-<span class="st"> </span><span class="kw">dgamma</span>(x, <span class="dt">shape=</span><span class="dv">14</span>, <span class="dt">rate=</span><span class="fl">1.9</span>)
+
+<span class="kw">plot</span>(x, hx, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">lty=</span><span class="dv">1</span>, <span class="dt">xlab=</span><span class="st">&quot;Value of X&quot;</span>,
+     <span class="dt">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Gamma distribution with shape=14, rate=1.9&quot;</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Note that with these parameters, the above gamma distribution is skewed slightly to the right compared to a normal distribution having the same mean and standard deviation. In other words, the mean of the gamma is not at the precise midpoint of the judgemental range. Unlike the normal, a gamma distribution’s mean does not equal its median or mode.</p>
+</div>
+<div id="the-gbustermean-function" class="section level1">
+<h1>The GbusterMean function</h1>
+<p>Alternatively, perhaps it’s easier for our judge to articulate his estimate in terms of a specific mean and range instead. For example, a judge might declare he believes that the unknown value of X lies within a gamma distribution having an exact mean of 7.5 and a range of 4 (i.e., roughly +/- 2 units on either side of the mean) with probability .90. This problem is solved using the GbusterMean() function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">judgement2 &lt;-<span class="st"> </span><span class="kw">GbusterMean</span>(<span class="fl">7.5</span>, <span class="dv">4</span>, <span class="dt">pct=</span>.<span class="dv">90</span>)</code></pre></div>
+<p>…which returns the following list object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(judgement2)</code></pre></div>
+<pre><code>## $par
+## [1] 23.095890  3.079452
+## 
+## $value
+## [1] 1.187258e-08
+## 
+## $counts
+## function gradient 
+##      147       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL</code></pre>
+<p>Now the function returns the gamma shape and rate parameters 23.1 and 3.08, respectively. This translates into a gamma distribution with a mean of 7.5 and a standard deviation of 1.56. It’s interesting that the gamma parameters in Judgement1 and Judgement2 are quite different and yet yield somewhat similar means and variances. This demonstrates the difficultly of eliciting appropriate gamma shape and rate parameters directly.</p>
+<p>The functions in gammabuster work over a wide range of inputs. It’s possible, however, that given particularly extreme inputs, gammabuster won’t converge. Using the above example, this would be revealed if judgement2[convergence] <span class="math inline">\(\neq\)</span> 0. If the algorithm fails to converge, try using different parameter starting values, ones that more closely approximate the desired gamma mean such as,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">judgement2 &lt;-<span class="st"> </span><span class="kw">GbusterMean</span>(<span class="fl">7.5</span>, <span class="dv">4</span>, <span class="dt">pct=</span>.<span class="dv">99</span>, <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">20</span>,<span class="dv">3</span>))</code></pre></div>
+</div>
+<div id="why-the-gammabuster-package" class="section level1">
+<h1>Why the gammabuster package?</h1>
+<p>The gamma distribution is the Bayesian <a href="https://en.wikipedia.org/wiki/Conjugate_prior">conjugate prior</a> to the Poisson. So, gammabuster is helpful for eliciting judgemental Bayesian priors. If one has a Poisson model with mean <span class="math inline">\(\lambda\)</span>, one an use the gammabuster package to specify a gamma conjugate prior on <span class="math inline">\(\lambda\)</span>. Making this more concrete and to carry the above example one step further, one could specify a prior belief that the mean <span class="math inline">\(\lambda\)</span> of a Poisson distribution has a 90% chance of lying between 5 and 10 as follow… <span class="math display">\[
+    \begin{aligned}
+    \lambda \sim &amp; gamma(14, 1.9)\\
+    \end{aligned}
+  \]</span> …And include the above prior using one’s favorite Bayesian software (e.g., <a href="http://mc-stan.org/users/interfaces/pystan.html">PyStan</a>, <a href="http://mc-stan.org/users/interfaces/rstan">RStan</a>, <a href="http://www.openbugs.net/w/FrontPage">OpenBugs</a>, or SAS’s <a href="https://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/mcmc_toc.htm">PROC MCMC</a>). In addition, because the gamma is conjugate, gammabuster can help one compute posterior estimates analytically. It also provides the ingredients should one wish to employ a gamma “data augmentation prior” (DAP).</p>
+<p>My creation of the gammabuster package was inspired by <a href="http://cadms.ucdavis.edu/diagnostictests/betabuster.html">betabuster</a>, a tool for eliciting judgemental beta priors. An R package version of Betabuster is also available in the <a href="https://cran.r-project.org/web/packages/epiR/index.html">epiR package</a> on CRAN.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
