@@ -29,8 +29,9 @@ devtools::install_github("JohnsonBrent/gammabuster")
 
 Here's one example. Suppose one has elicited judgments that the range of a random variable lies between 0 and 5. Assuming the random variable is strictly positive and continuous within this space, a gamma might be the appropriate distribution. If so, the following function generates the gamma parameters consistent with the judgement:
 
-```{r example}
+```{r example, echo = TRUE, eval=FALSE}
 GbusterMinMax(0, 5)
 ```
 
 There are more examples and a deeper explanation in the vignette. 
+
