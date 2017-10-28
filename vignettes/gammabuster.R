@@ -11,8 +11,17 @@ print(judgement1)
 x <- seq(2, 14, length=100)
 hx <- dgamma(x, shape=14, rate=1.9)
 
-plot(x, hx, type="l", lty=1, xlab="Value of X",
-     ylab="Density", main="Gamma distribution with shape=14, rate=1.9", col="blue", lwd=3)
+plot(
+  x,
+  hx,
+  type = "l",
+  lty = 1,
+  xlab = "Value of X",
+  ylab = "Density",
+  main = "Gamma distribution for an interval between 5 and 10 \n (i.e., shape=14, scale=1.9)",
+  col = "blue",
+  lwd = 3
+)
 
 ## ----mean.input, include = TRUE------------------------------------------
 judgement2 <- GbusterMean(7.5, 4, pct=.90)
